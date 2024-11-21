@@ -1,0 +1,17 @@
+class almacen:
+    def __init__(self, posicion, objeto, ocupado):
+        self.posicion=posicion
+        self.objeto=objeto
+        self.ocupado=ocupado
+    
+    def inicioInventario():
+        Inventario=[]
+        for i in range(6):
+            Inventario.append(almacen(i+1," ",False))
+        return Inventario
+
+
+Inventario=almacen.inicioInventario()
+
+print(Inventario[5].posicion)
+
