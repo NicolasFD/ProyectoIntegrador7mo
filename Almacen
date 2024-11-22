@@ -7,11 +7,24 @@ class almacen:
     def inicioInventario():
         Inventario=[]
         for i in range(6):
-            Inventario.append(almacen(i+1," ",False))
+            Inventario.append(almacen(i+1,"N/O",False))
         return Inventario
+    
+    def agregar(Inventario, posicion, objeto ):
+        Inventario[posicion-1]=almacen(posicion,objeto,True)
+    
+    def eliminar(Inventario, posicion):
+        Inventario[posicion-1]=almacen(posicion,"N/O",False)
+    
+    
+    
+
 
 
 Inventario=almacen.inicioInventario()
-
-print(Inventario[5].posicion)
+almacen.agregar(Inventario, 2, "Motor")
+almacen.eliminar(Inventario, 2)
+for obj in Inventario:
+    print(obj.posicion,obj.objeto,obj.ocupado,sep=' ')
+print(Inventario[1].objeto)
 
