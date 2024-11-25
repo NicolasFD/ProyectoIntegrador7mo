@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import cv2
 
 # start webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 cap.set(3, 640)
 cap.set(4, 480)
 
@@ -24,7 +24,15 @@ for r in results:
     boxes = r.boxes
 
     for box in boxes:
-            # objects detected write in a string
+        
+        x1, y1, x2, y2 = box.xyxy[0]
+        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)   # objects detected write in a string
+        
+        """if(y1<200):
+            if(x1<213):
+        """""
+
+
         cls = int(box.cls[0])
         List+=(classNames[cls]+"\n")
 

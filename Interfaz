@@ -1,5 +1,11 @@
 from tkinter import Tk,Label,messagebox,Button
 from tkinter.ttk import *
+from tkinter import *
+from ultralytics import YOLO
+import cv2
+import math
+
+
 
 class almacen:
     def __init__(self, posicion, objeto, ocupado):
@@ -31,46 +37,108 @@ class almacen:
             if objeto==obj.objeto:
                 return True
         return False
-            
-
 
 Inventario=almacen.inicioInventario()
 
-def Extraer():
-    Objeto=messagebox.askquestion(message="Qué objeto desea extraer?")
-    if almacen.buscar(Inventario,Objeto):
-        messagebox 
-    else:
-        messagebox.showinfo(message="Objeto no encontrado")
+# start webcam
+cap = cv2.VideoCapture(1)
+cap.set(3, 640)
+cap.set(4, 480)
 
-def Pintar():
-    pass
+# model
+model = YOLO("yolo-Weights/best.pt")
 
-def Ensamblar():
-    pass
+# object classes
+classNames = ["Bisagra","Llanta","Motor","Rin","Tornillo","Tuerca"]
+
+# discard 50 first frames to intialize de cam
+for _ in range(50):  
+    result, image = cap.read()
+
+success, img = cap.read()
+results = model(img, stream=True)
+
+for r in results:
+    boxes = r.boxes
+
+    for box in boxes:
+        
+        x1, y1, x2, y2 = box.xyxy[0]
+        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)   # objects detected write in a string
+        
+        cls = int(box.cls[0])
+        
+        if(y1<200):
+            if(x1<213):
+                almacen.agregar(Inventario,2,classNames[cls])
+            elif(x1>426):
+                almacen.agregar(Inventario,6,classNames[cls])
+            else:
+                almacen.agregar(Inventario,4,classNames[cls])
+        else:
+            if(x1<213):
+                almacen.agregar(Inventario,1,classNames[cls])
+            elif(x1>426):
+                almacen.agregar(Inventario,5,classNames[cls])
+            else:
+                almacen.agregar(Inventario,3,classNames[cls])
+
+class Aplicacion:
+    def VentanaPregunta():
+        Pregunta=Tk()
+
+        def getTxt():
+            texto=txtObjeto.get()
+            Objeto.set(texto)
+            Pregunta.destroy()
+        
+        txtAnuncio=Label(Pregunta,text="Objetos encontrados en almacen:")
+        txtAnuncio.pack()
+
+        txtLista=Label(Pregunta,text=almacen.listar(Inventario))
+        txtLista.pack()
+
+        txtPregunta=Label(Pregunta,text="Con qué objeto desea interactuar?")
+        txtPregunta.pack()
+        
+        Objeto=StringVar()
+        txtObjeto=Entry(Pregunta,textvariable=Objeto)
+        txtObjeto.pack()
+
+        btnAceptar=Button(Pregunta,text="Aceptar",command=getTxt)
+        btnAceptar.pack()
+
+        Pregunta.mainloop()
+        return Objeto
+        
+    def Extraer():
+        Objeto=Aplicacion.VentanaPregunta()
+        print(Objeto)
+
+    def Pintar():
+        pass
+
+    def Ensamblar():
+        pass
+
 
 ventana = Tk()
-ventana.geometry("250x300")
+ventana.geometry("150x100")
 ventana.title("Rodolfito")
 
 txtTitulo=Label(ventana,text='Panel de control')
 txtTitulo.pack()
 
-txtAccion=Label(ventana,text='Acción a realizar:')
-txtAccion.place(x=30,y=30)
+btnExtraer=Button(ventana,text="Extraer",command=Aplicacion.Extraer)
+btnExtraer.pack()
 
-Opciones=["Extraer","Pintar","Ensamblar"]
-cmbOpciones=Combobox(width="10",values=Opciones,state="readonly")
-cmbOpciones.current(0)
-cmbOpciones.place(x=130,y=30)
+btnPintar=Button(ventana,text="Pintar",command=Aplicacion.Pintar)
+btnPintar.pack()
 
-btnRealizar=Button(ventana,text="Realizar",command=cmbOpciones.get())
-btnRealizar.place(x=30,y=60)
+btnEnsamblar=Button(ventana,text="Ensamblar",command=Aplicacion.Ensamblar)
+btnEnsamblar.pack()
 
-txtTituloALmacen=Label(ventana,text="Lista de objetos en almacen:")
-txtTituloALmacen.place(x=30,y=90)
 
-txtList=Label(ventana,text=almacen.listar(Inventario))
-txtList.place(x=30,y=110)
 
 ventana.mainloop()
+
