@@ -3,6 +3,7 @@ class almacen:
         self.posicion=posicion
         self.objeto=objeto
         self.ocupado=ocupado
+        self.numero=6
     
     def inicioInventario():
         Inventario=[]
@@ -17,16 +18,13 @@ class almacen:
         Inventario[posicion-1]=almacen(posicion,"N/O",False)
     
     def listar(Inventario):
+        List=""
         for obj in Inventario:
-            print(obj.posicion,obj.objeto,obj.ocupado,sep="")
+            List+=str(obj.posicion)+" "+obj.objeto+"\n"
+        return List
 
     def buscar(Inventario, posicion):
-        return Inventario[posicion-1].posicion,Inventario[posicion-1].objeto,Inventario[posicion-1].ocupado
-    
-    
-    
-
-
+        return Inventario[posicion-1].posicion,Inventario[posicion-1].objeto
 
 Inventario=almacen.inicioInventario()
 almacen.agregar(Inventario, 2, "Motor")

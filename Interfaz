@@ -1,0 +1,76 @@
+from tkinter import Tk,Label,messagebox,Button
+from tkinter.ttk import *
+
+class almacen:
+    def __init__(self, posicion, objeto, ocupado):
+        self.posicion=posicion
+        self.objeto=objeto
+        self.ocupado=ocupado
+        self.numero=6
+    
+    def inicioInventario():
+        Inventario=[]
+        for i in range(6):
+            Inventario.append(almacen(i+1,"N/O",False))
+        return Inventario
+    
+    def agregar(Inventario, posicion, objeto):
+        Inventario[posicion-1]=almacen(posicion,objeto,True)
+    
+    def eliminar(Inventario, posicion):
+        Inventario[posicion-1]=almacen(posicion,"N/O",False)
+    
+    def listar(Inventario):
+        List=""
+        for obj in Inventario:
+            List+=str(obj.posicion)+" "+obj.objeto+"\n"
+        return List
+
+    def buscar(Inventario, objeto):
+        for obj in Inventario:
+            if objeto==obj.objeto:
+                return True
+        return False
+            
+
+
+Inventario=almacen.inicioInventario()
+
+def Extraer():
+    Objeto=messagebox.askquestion(message="Qué objeto desea extraer?")
+    if almacen.buscar(Inventario,Objeto):
+        messagebox 
+    else:
+        messagebox.showinfo(message="Objeto no encontrado")
+
+def Pintar():
+    pass
+
+def Ensamblar():
+    pass
+
+ventana = Tk()
+ventana.geometry("250x300")
+ventana.title("Rodolfito")
+
+txtTitulo=Label(ventana,text='Panel de control')
+txtTitulo.pack()
+
+txtAccion=Label(ventana,text='Acción a realizar:')
+txtAccion.place(x=30,y=30)
+
+Opciones=["Extraer","Pintar","Ensamblar"]
+cmbOpciones=Combobox(width="10",values=Opciones,state="readonly")
+cmbOpciones.current(0)
+cmbOpciones.place(x=130,y=30)
+
+btnRealizar=Button(ventana,text="Realizar",command=cmbOpciones.get())
+btnRealizar.place(x=30,y=60)
+
+txtTituloALmacen=Label(ventana,text="Lista de objetos en almacen:")
+txtTituloALmacen.place(x=30,y=90)
+
+txtList=Label(ventana,text=almacen.listar(Inventario))
+txtList.place(x=30,y=110)
+
+ventana.mainloop()
