@@ -40,48 +40,49 @@ class almacen:
 
 Inventario=almacen.inicioInventario()
 
-# start webcam
-cap = cv2.VideoCapture(1)
-cap.set(3, 640)
-cap.set(4, 480)
+def camara():
+    # start webcam
+    cap = cv2.VideoCapture(1)
+    cap.set(3, 640)
+    cap.set(4, 480)
 
-# model
-model = YOLO("yolo-Weights/best.pt")
+    # model
+    model = YOLO("yolo-Weights/best.pt")
 
-# object classes
-classNames = ["Bisagra","Llanta","Motor","Rin","Tornillo","Tuerca"]
+    # object classes
+    classNames = ["Bisagra","Llanta","Motor","Rin","Tornillo","Tuerca"]
 
-# discard 50 first frames to intialize de cam
-for _ in range(50):  
-    result, image = cap.read()
+    # discard 50 first frames to intialize de cam  
+    for _ in range(50):  
+        result, image = cap.read()
 
-success, img = cap.read()
-results = model(img, stream=True)
+    success, img = cap.read()
+    results = model(img, stream=True)
 
-for r in results:
-    boxes = r.boxes
+    for r in results:
+        boxes = r.boxes
 
-    for box in boxes:
+        for box in boxes:
         
-        x1, y1, x2, y2 = box.xyxy[0]
-        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)   # objects detected write in a string
+            x1, y1, x2, y2 = box.xyxy[0]
+            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)   # objects detected write in a string
         
-        cls = int(box.cls[0])
+            cls = int(box.cls[0])
         
-        if(y1<200):
-            if(x1<213):
-                almacen.agregar(Inventario,2,classNames[cls])
-            elif(x1>426):
-                almacen.agregar(Inventario,6,classNames[cls])
+            if(y1<200):
+                if(x1<213):
+                    almacen.agregar(Inventario,2,classNames[cls])
+                elif(x1>426):
+                    almacen.agregar(Inventario,6,classNames[cls])
+                else:
+                    almacen.agregar(Inventario,4,classNames[cls])
             else:
-                almacen.agregar(Inventario,4,classNames[cls])
-        else:
-            if(x1<213):
-                almacen.agregar(Inventario,1,classNames[cls])
-            elif(x1>426):
-                almacen.agregar(Inventario,5,classNames[cls])
-            else:
-                almacen.agregar(Inventario,3,classNames[cls])
+                if(x1<213):
+                    almacen.agregar(Inventario,1,classNames[cls])
+                elif(x1>426):
+                    almacen.agregar(Inventario,5,classNames[cls])
+                else:
+                    almacen.agregar(Inventario,3,classNames[cls])
 
 class Aplicacion:
     def VentanaPregunta():
@@ -112,6 +113,7 @@ class Aplicacion:
         return Objeto
         
     def Extraer():
+        camara()
         Objeto=Aplicacion.VentanaPregunta()
         print(Objeto)
 
