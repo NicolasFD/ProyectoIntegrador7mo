@@ -35,8 +35,8 @@ class almacen:
     def buscar(Inventario, objeto):
         for obj in Inventario:
             if objeto==obj.objeto:
-                return True
-        return False
+                return obj.posicion
+        
 
 Inventario=almacen.inicioInventario()
 
@@ -84,8 +84,8 @@ def camara():
                 else:
                     almacen.agregar(Inventario,3,classNames[cls])
 
-class Aplicacion:
-    def VentanaPregunta():
+class Metodos:
+    def VentanaPregunta1():
         Pregunta=Toplevel()
 
         def getTxt():
@@ -113,20 +113,57 @@ class Aplicacion:
 
         Pregunta.wait_window()
         return Objeto.get()
+    
+    def VentanaPregunta2():
+        Pregunta=Toplevel()
+
+        def getTxt():
+            Objeto.set(txtObjeto.get())
+            Pregunta.destroy()
         
+        txtLista=Label(Pregunta,text=almacen.listar(Inventario))
+        txtLista.pack()
+
+        txtPregunta=Label(Pregunta,text="Qué objeto deseas ensamblar?")
+        txtPregunta.pack()
+        
+        miFrame=Frame(Pregunta)
+        miFrame.pack()
+        
+        Objeto=StringVar()
+        txtObjeto=Entry(miFrame,textvariable=Objeto)
+        txtObjeto.pack()
+
+        btnAceptar=Button(miFrame,text="Aceptar",command=lambda:getTxt())
+        btnAceptar.pack()
+
+        Pregunta.wait_window()
+
+        return Objeto.get()
+    
+    def Mover(Pintar,Posicion1,Posicion2):
+        pass
+
 def Extraer():
-    Objeto=Aplicacion.VentanaPregunta()
-    print(Objeto)
+    camara()
+    Objeto=Metodos.VentanaPregunta1()
+    Posicion=almacen.buscar(Inventario,Objeto)
+    Metodos.Mover(0,Posicion,0)
 
 def Pintar():
     camara()
-    Objeto=Aplicacion.VentanaPregunta()
+    Objeto=Metodos.VentanaPregunta1()
+    Posicion=almacen.buscar(Inventario,Objeto)
+    Metodos.Mover(1,Posicion,0)
         
 
 def Ensamblar():
     camara()
-    Objeto=Aplicacion.VentanaPregunta()
-
+    Objeto1=Metodos.VentanaPregunta1()
+    Objeto2=Metodos.VentanaPregunta2()
+    Posicion1=almacen.buscar(Inventario,Objeto1)
+    Posicion2=almacen.buscar(Inventario,Objeto2)
+    Metodos.Mover(0,Posicion1,Posicion2)
 
 ventana = Tk()
 ventana.geometry("150x100")
@@ -147,4 +184,3 @@ btnEnsamblar.pack()
 
 
 ventana.mainloop()
-
