@@ -1,0 +1,19 @@
+from tkinter import *
+
+root = Tk()
+top = Toplevel()
+top.title("TopLevel")
+
+def trasient():
+    if(root.state() == "iconic"):
+        top.iconify()
+    else:
+        top.lift()
+
+    top.after(1, trasient)
+
+Entry(root).pack()
+
+trasient()
+
+root.mainloop()

@@ -40,10 +40,9 @@ class Aplicacion:
         Pregunta=Toplevel()
 
         def getTxt():
-            texto=txtObjeto.get()
-            Objeto.set(texto)
+            Objeto.set(txtObjeto.get())
             Pregunta.destroy()
-        
+
         txtAnuncio=Label(Pregunta,text="Objetos encontrados en almacen:")
         txtAnuncio.pack()
 
@@ -63,14 +62,12 @@ class Aplicacion:
         btnAceptar=Button(miFrame,text="Aceptar",command=lambda:getTxt())
         btnAceptar.pack()
 
-        Pregunta.mainloop()
+        Pregunta.wait_window()
         return Objeto.get()
         
 def Extraer():
     Objeto=Aplicacion.VentanaPregunta()
-    top=Tk()
-    Label(top,text=Objeto).pack()
-    top.mainloop()
+    print(Objeto)
         
     
 def Pintar():

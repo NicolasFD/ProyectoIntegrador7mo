@@ -86,13 +86,12 @@ def camara():
 
 class Aplicacion:
     def VentanaPregunta():
-        Pregunta=Tk()
+        Pregunta=Toplevel()
 
         def getTxt():
-            texto=txtObjeto.get()
-            Objeto.set(texto)
+            Objeto.set(txtObjeto.get())
             Pregunta.destroy()
-        
+
         txtAnuncio=Label(Pregunta,text="Objetos encontrados en almacen:")
         txtAnuncio.pack()
 
@@ -102,26 +101,31 @@ class Aplicacion:
         txtPregunta=Label(Pregunta,text="Con qué objeto desea interactuar?")
         txtPregunta.pack()
         
+        miFrame=Frame(Pregunta)
+        miFrame.pack()
+        
         Objeto=StringVar()
-        txtObjeto=Entry(Pregunta,textvariable=Objeto)
+        txtObjeto=Entry(miFrame,textvariable=Objeto)
         txtObjeto.pack()
 
-        btnAceptar=Button(Pregunta,text="Aceptar",command=getTxt)
+        btnAceptar=Button(miFrame,text="Aceptar",command=lambda:getTxt())
         btnAceptar.pack()
 
-        Pregunta.mainloop()
-        return Objeto
+        Pregunta.wait_window()
+        return Objeto.get()
         
-    def Extraer():
-        camara()
-        Objeto=Aplicacion.VentanaPregunta()
-        print(Objeto)
+def Extraer():
+    Objeto=Aplicacion.VentanaPregunta()
+    print(Objeto)
 
-    def Pintar():
-        pass
+def Pintar():
+    camara()
+    Objeto=Aplicacion.VentanaPregunta()
+        
 
-    def Ensamblar():
-        pass
+def Ensamblar():
+    camara()
+    Objeto=Aplicacion.VentanaPregunta()
 
 
 ventana = Tk()
@@ -131,13 +135,13 @@ ventana.title("Rodolfito")
 txtTitulo=Label(ventana,text='Panel de control')
 txtTitulo.pack()
 
-btnExtraer=Button(ventana,text="Extraer",command=Aplicacion.Extraer)
+btnExtraer=Button(ventana,text="Extraer",command=Extraer)
 btnExtraer.pack()
 
-btnPintar=Button(ventana,text="Pintar",command=Aplicacion.Pintar)
+btnPintar=Button(ventana,text="Pintar",command=Pintar)
 btnPintar.pack()
 
-btnEnsamblar=Button(ventana,text="Ensamblar",command=Aplicacion.Ensamblar)
+btnEnsamblar=Button(ventana,text="Ensamblar",command=Ensamblar)
 btnEnsamblar.pack()
 
 
