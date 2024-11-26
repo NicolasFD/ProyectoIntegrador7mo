@@ -1,3 +1,10 @@
+from tkinter import Tk,Label,messagebox,Button
+from tkinter.ttk import *
+from tkinter import *
+from ultralytics import YOLO
+import cv2
+import math
+
 class almacen:
     def __init__(self, posicion, objeto, ocupado):
         self.posicion=posicion
@@ -27,8 +34,66 @@ class almacen:
         return Inventario[posicion-1].posicion,Inventario[posicion-1].objeto
 
 Inventario=almacen.inicioInventario()
-almacen.agregar(Inventario, 2, "Motor")
-for obj in Inventario:
-    print(obj.posicion,obj.objeto,obj.ocupado,sep=' ')
-print(Inventario[1].objeto)
-print(almacen.buscar(Inventario,2))
+
+class Aplicacion:
+    def VentanaPregunta():
+        Pregunta=Toplevel()
+
+        def getTxt():
+            texto=txtObjeto.get()
+            Objeto.set(texto)
+            Pregunta.destroy()
+        
+        txtAnuncio=Label(Pregunta,text="Objetos encontrados en almacen:")
+        txtAnuncio.pack()
+
+        txtLista=Label(Pregunta,text=almacen.listar(Inventario))
+        txtLista.pack()
+
+        txtPregunta=Label(Pregunta,text="Con qué objeto desea interactuar?")
+        txtPregunta.pack()
+        
+        miFrame=Frame(Pregunta)
+        miFrame.pack()
+        
+        Objeto=StringVar()
+        txtObjeto=Entry(miFrame,textvariable=Objeto)
+        txtObjeto.pack()
+
+        btnAceptar=Button(miFrame,text="Aceptar",command=lambda:getTxt())
+        btnAceptar.pack()
+
+        Pregunta.mainloop()
+        return Objeto.get()
+        
+def Extraer():
+    Objeto=Aplicacion.VentanaPregunta()
+    top=Tk()
+    Label(top,text=Objeto).pack()
+    top.mainloop()
+        
+    
+def Pintar():
+    Objeto=Aplicacion.VentanaPregunta()
+        
+
+def Ensamblar():
+    Objeto=Aplicacion.VentanaPregunta()
+
+ventana = Tk()
+ventana.geometry("150x100")
+ventana.title("Rodolfito")
+
+txtTitulo=Label(ventana,text='Panel de control')
+txtTitulo.pack()
+
+btnExtraer=Button(ventana,text="Extraer",command=Extraer)
+btnExtraer.pack()
+
+btnPintar=Button(ventana,text="Pintar",command=Pintar)
+btnPintar.pack()
+
+btnEnsamblar=Button(ventana,text="Ensamblar",command=Ensamblar)
+btnEnsamblar.pack()
+
+ventana.mainloop()
