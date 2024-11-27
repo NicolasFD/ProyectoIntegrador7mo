@@ -52,13 +52,11 @@ def camara():
                     almacen.agregar(Inventario,3,classNames[cls])
 
 def Mover(Accion,Posicion1,Posicion2):
-    arduino = serial.Serial("COM4", 9600)
+    arduino = serial.Serial("COM6", 9600)
     time.sleep(2)
-    arduino.write(Accion.decode())
+    Numero=Accion*100+Posicion1*10+Posicion2
+    arduino.write(Numero)
     time.sleep(2)
-    arduino.write(Posicion1.decode())
-    time.sleep(2)
-    arduino.write(Posicion2.decode())
     arduino.close()
 
 def Extraer():
